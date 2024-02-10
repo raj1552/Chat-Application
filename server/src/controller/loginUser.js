@@ -1,4 +1,4 @@
-import bycrpt from 'bycrypt'
+import bcrypt from 'bcrypt'
 import pool from "../../db/config.js"
 import jwt from 'jsonwebtoken'
 
@@ -19,7 +19,7 @@ const loginUser = async (req , res) =>{
     }
 
     const hashedPassword = rows[0].password
-    const passwordMatch = await bycrpt.compare(password , hashedPassword)
+    const passwordMatch = await bcrypt.compare(password , hashedPassword)
 
     if(!passwordMatch){
       return res.status(401).json({error : 'Wrong Password'})
@@ -34,4 +34,4 @@ const loginUser = async (req , res) =>{
   }
 }
 
-export default loginUser;
+export default { loginUser };

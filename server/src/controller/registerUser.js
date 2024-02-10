@@ -13,8 +13,7 @@ const registerUser = async (req, res) =>{
       return res.status(401).json({error : 'Password No Match'})
     }
     const hashedPassword = await bcrypt.hash(password, 10)
-    const { rows } = await pool.query('INSERT INTO users 
-                                      VALUES($1, $2, $3, $4, $5)'[email, username, password, phonenumber])
+    const { rows } = await pool.query('INSERT INTO users VALUES($1, $2, $3, $4, $5)'[email, username, password, phonenumber])
     res.json({sucess : true, body: { user : rows[0]}})
   }
   catch(err){
@@ -23,4 +22,4 @@ const registerUser = async (req, res) =>{
   }
 }
 
-export default registerUser
+export default { registerUser }

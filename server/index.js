@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser'
 import userRoutes from './src/router/userRoutes.js'
 
 const app = express();
-const PORT = 4000
+const PORT = 3000
 
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(bodyParser.json())
