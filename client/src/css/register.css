@@ -1,0 +1,66 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+    gap: 50px;
+}
+.elements{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 20%;
+    gap: 30px;
+    padding: 40px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 10px;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+.email{
+    padding: 20px 25px 20px 25px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ececec;
+}
+.username{
+    padding: 20px 25px 20px 25px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ececec;
+}
+.password{
+    padding: 20px 25px 20px 25px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ececec;
+}
+.phonenumber{
+    padding: 20px 25px 20px 25px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ececec;
+}
+.btn{
+    background-color: blue;
+    padding: 10px 15px 10px 15px;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+.agree-terms{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.policy{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
