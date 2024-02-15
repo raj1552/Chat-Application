@@ -11,15 +11,16 @@ const loginUser = async (req , res) =>{
       return res.status(401).json({error : 'Username & Password Required!!'})
     }
 
-    const { rows } = await pool.query("SELECT username FROM users WHERE username = $1 or email = $2", [identifier , identifier])
-    const token = jwt.sign({user : identifier}, '12345')
+    const { rows } = await pool.query("SELECT username, password FROM users WHERE username = $1 or email = $2", [identifier, identifier])
+    const  userId  = await pool.query("SELECT id FROM users WHERE username = $1 or email = $2;", [identifier, identifier])
+    const token = jwt.sign({user : userId.rows[0]}, '12345')
 
     if(rows.length === 0){
       return res.status(401).json({error : 'User Not Found'})
     }
 
     const hashedPassword = rows[0].password
-    const passwordMatch = await bcrypt.compare(password , hashedPassword)
+    const passwordMatch = await bcrypt.compare(password, hashedPassword)
 
     if(!passwordMatch){
       return res.status(401).json({error : 'Wrong Password'})

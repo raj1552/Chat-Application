@@ -13,11 +13,13 @@ const registerUser = async (req, res) =>{
       return res.status(401).json({error : 'Password No Match'})
     }
     const hashedPassword = await bcrypt.hash(password, 10)
-    const { rows } = await pool.query('INSERT INTO users VALUES($1, $2, $3, $4, $5)'[email, username, password, phonenumber])
-    res.json({sucess : true, body: { user : rows[0]}})
+    const { rows } = await pool.query("INSERT INTO users (username, password, confirmpassword, email, phone_number) VALUES ($1, $2, $3, $4, $5);",
+                                      [username, hashedPassword, hashedPassword, email, phonenumber])
+    const userId = await pool.query("SELECT id FROM users where username = $1", [username])
+    res.json({sucess : true, body: {id : userId.rows[0].id}})
   }
   catch(err){
-    console.log(error)
+    console.error(err)
     res.status(400).json({error: 'Something Went Wrong'})
   }
 }
