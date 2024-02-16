@@ -1,0 +1,43 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+.navbar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 70px;
+    box-shadow: rgba(109, 109, 129, 0.2) 0px 7px 29px 0px;
+}
+.navcontainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 50px 0 50px;
+    width: 100%;
+}
+.navitems{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.navitems img{
+    width: 150px;
+    height: auto;
+}
+.signin-btn a{
+    text-decoration: none;
+}
+.signin-btn a button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 15px 10px 15px;
+    font-size: 16px;
+    font-weight: 600;
+    color: black;
+    border: none;
+    border-radius: 10px;
+}

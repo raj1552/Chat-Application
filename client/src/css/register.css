@@ -1,9 +1,8 @@
 .container{
     display: flex;
-    flex-direction: row;
-    align-items: center;
     justify-content: center;
-    height: 90vh;
+    align-items: center;
+    min-height: 90vh;
     gap: 50px;
 }
 .elements{
@@ -11,7 +10,7 @@
     flex-direction: column;
     justify-content: center;
     width: 20%;
-    gap: 30px;
+    gap: 20px;
     padding: 40px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-radius: 10px;

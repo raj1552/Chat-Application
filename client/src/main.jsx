@@ -1,9 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Register from './components/register.jsx'
+import App from './App.jsx'
+import { BrowserRouter } from 'react-router-dom'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Register/>
+    <BrowserRouter>
+    <App/>
+    </BrowserRouter>
   </React.StrictMode>,
 )
