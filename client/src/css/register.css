@@ -63,3 +63,9 @@ form{
     flex-direction: row;
     gap: 10px;
 }
+
+@media (max-width: 440px) {
+    .elements{
+        width: 70%;
+    }
+}

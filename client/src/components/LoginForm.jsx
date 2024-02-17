@@ -3,9 +3,11 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import "../css/Login.css";
+import { useNavigate } from 'react-router-dom';
+
 
 const LoginForm = () => {
-  const signup = 'Signup' 
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     identifier: "",
     password: "",
@@ -29,6 +31,7 @@ const LoginForm = () => {
       );
       localStorage.setItem("token", response.data.body.token);
       console.log("Sucessfully login");
+      navigate('/chat')
     } catch (error) {
       setError("Please try again.");
     }

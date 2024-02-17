@@ -13,6 +13,9 @@ const RegisterForm = () => {
     privacyPolicy: false,
   });
 
+  const [sucess, setSucess] = useState('')
+  const [error, setError] = useState('')
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -32,12 +35,11 @@ const RegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      console.log("Iam in")
       const response = await axios.post('http://localhost:3000/user/register', formData)
-      console.log(response)
+      setSucess("Sucessfully Registered")
     }
     catch(error){
-      console.error(error)
+      setError("Couldn't Register the account")
     }
   };
   return (
@@ -113,6 +115,8 @@ const RegisterForm = () => {
               </label>
             </div>
           </div>
+          {sucess && <p className='sucess'>{sucess}</p>}
+          {error && <p className="error">{error}</p>}
           <button className="btn" type="submit">
             Register
           </button>
