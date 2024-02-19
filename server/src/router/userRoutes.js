@@ -6,8 +6,8 @@ import authPassword from '../controller/authPassword.js'
 
 const router = express.Router()
 
-router.post('/login', authenticateToken,login.loginUser)
-router.post('/register',authenticateToken, register.registerUser)
+router.post('/login',login.loginUser)
+router.post('/register', register.registerUser)
 router.post('/forgetpassword', authPassword.forgetPassword)
 router.post('/resetpassword', authPassword.resetPassword)
 

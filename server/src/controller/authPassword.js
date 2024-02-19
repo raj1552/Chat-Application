@@ -45,7 +45,7 @@ const forgetPassword = async (req, res) => {
                 console.error(error);
                 return res.status(500).json("Failed to send email");
             }
-            console.log('Email sent: ' + info.response);
+
             res.status(200).json("Your OTP has been sent to the email.");
         });
     } catch (error) {

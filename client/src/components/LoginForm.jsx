@@ -60,7 +60,7 @@ const LoginForm = () => {
             onChange={handleChange}
             required
           />
-          <a href="">Forgot Password?</a>
+          <a href="/forgetpassword">Forgot Password?</a>
           {error && <p className="error">{error}</p>}
           <button className="btn" type="submit">
             Sign in
