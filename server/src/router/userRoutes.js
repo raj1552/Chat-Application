@@ -3,6 +3,7 @@ import login from '../controller/loginUser.js'
 import register from '../controller/registerUser.js'
 import authenticateToken from '../middleware/authUser.js'
 import authPassword from '../controller/authPassword.js'
+import authGoogle from '../controller/authGoogle.js'
 
 const router = express.Router()
 

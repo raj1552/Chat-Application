@@ -37,6 +37,16 @@ const LoginForm = () => {
     }
   };
 
+  const signinGoogle = async (e) =>{
+    e.preventDefault()
+    try{
+      const response = await axios.get('http://localhost:3000/auth/google', {headers:{'Access-Control-Allow-Origin': '*'}})
+      console.log(response)
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
   return (
     <div className="container">
       <div className="elements">
@@ -67,7 +77,7 @@ const LoginForm = () => {
           </button>
         </form>
         <p className="or">Or</p>
-        <button className="google">
+        <button onClick={signinGoogle} className="google">
           <FontAwesomeIcon icon={faGoogle} />
           Sign in with Google
         </button>
