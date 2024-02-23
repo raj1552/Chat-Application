@@ -1,5 +1,5 @@
-import ForgetpasswordForm from "../components/Forgetpasswordform";
-import Navbar from "../components/Navbar";
+import ForgetpasswordForm from "../components/authcomponents/Forgetpasswordform";
+import Navbar from "../components/authcomponents/Navbar";
 
 const Forgetpassword = () => {
   return (

@@ -1,5 +1,5 @@
-import LoginForm from "../components/LoginForm";
-import Navbar from "../components/Navbar";
+import LoginForm from "../components/authcomponents/LoginForm.jsx";
+import Navbar from "../components/authcomponents/Navbar.jsx";
 
 const Login = () => {
     const path = '/register'

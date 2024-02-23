@@ -1,0 +1,28 @@
+.chat-container {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 50px 20px 30px 40px;
+    width: 20%;
+    gap: 30px;
+    overflow-y: auto; /* Add scrollbar when content overflows vertically */
+    max-height: calc(100vh - 100px); /* Set max height for scrolling effect */
+}
+
+.chat-users {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 10px 20px 10px 20px;
+    width: 300px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; /* Add cursor pointer for indicating clickability */
+}
+
+.chat-users img {
+    width: 70px;
+    height: 65px;
+    border-radius: 100%;
+}

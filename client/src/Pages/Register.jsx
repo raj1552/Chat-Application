@@ -1,5 +1,5 @@
-import Navbar from "../components/Navbar.jsx";
-import Form from "../components/RegisterForm.jsx";
+import Navbar from "../components/authcomponents/Navbar.jsx";
+import Form from "../components/authcomponents/RegisterForm.jsx";
 const Register = () => {
   const path = '/login'
   const signin = 'Sign in' 

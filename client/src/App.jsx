@@ -5,6 +5,7 @@ import Register  from './Pages/Register.jsx';
 import Forgetpassword from "./Pages/Forgetpassword.jsx";
 import Resetpassword from "./Pages/Resetpassword.jsx";
 import PrivateRoutes from "./utils/PrivateRoutes.jsx";
+import Setting from "./Pages/Setting.jsx";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     <Routes>
       <Route element={<PrivateRoutes/>}>
       <Route path="/" element={<Chat/>} />
+      <Route path="/setting" element={<Setting/>} />
       </Route>
       <Route path="/register" element={<Register/>} />
       <Route path="/login" element={<Login/>} />

@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import "../css/Login.css";
+import "../../css/Login.css";
 import { useNavigate } from 'react-router-dom';
 
 

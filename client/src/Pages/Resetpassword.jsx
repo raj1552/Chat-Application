@@ -1,5 +1,5 @@
-import Navbar from "../components/Navbar";
-import Resetpasswordform from "../components/Resetpasswordform";
+import Navbar from "../components/authcomponents/Navbar";
+import Resetpasswordform from "../components/authcomponents/Resetpasswordform";
 
 const Resetpassword = () => {
     return ( 
