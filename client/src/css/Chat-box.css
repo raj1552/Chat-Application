@@ -1,0 +1,171 @@
+.chat-box{
+    height: 750px; 
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.chat-box {
+    scrollbar-width: none;
+  }
+.chat-box::-webkit-scrollbar {
+    display: none;
+  }
+.chat-message-me{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: end;
+    gap: 10px;
+}
+.chat-message-me img{
+    width: 70px;
+    height: 65px;
+    border-radius: 100%;
+}
+.chat-message-me p {
+    background-color: #3457D5;
+    padding: 15px 20px 15px 20px;
+    border-radius: 10px;
+    color: white;
+    word-break: break-word; 
+    line-height: 24px;
+}
+.chat-message-friend p{
+    background-color: #ececec;
+    padding: 15px 20px 15px 20px;
+    border-radius: 10px;
+    word-wrap: break-word;
+}
+.chat-message-friend{
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.chat-message-friend img{
+    width: 70px;
+    height: 65px;
+    border-radius: 100%;
+}
+
+.message-container{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-left: 25%;
+    margin-right: 30px;
+}
+.message-text{
+    position: relative;
+}
+
+.message-text input{
+    position: relative;
+    width: 95%;
+    height: 35px;
+    border-radius: 20px;
+    background-color: #ececec;
+    border: none;
+    padding: 10px 20px 10px 30px;
+}
+.send{
+    position: absolute;
+    right: 45px;.chat-box{
+        height: 750px; 
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .chat-box {
+        scrollbar-width: none;
+      }
+    .chat-box::-webkit-scrollbar {
+        display: none;
+      }
+    .chat-message-me{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: end;
+        gap: 10px;
+    }
+    .chat-message-me img{
+        width: 70px;
+        height: 65px;
+        border-radius: 100%;
+    }
+    .chat-message-me p {
+        background-color: #3457D5;
+        padding: 15px 20px 15px 20px;
+        border-radius: 10px;
+        color: white;
+        word-break: break-word; 
+        line-height: 24px;
+    }
+    .chat-message-friend p{
+        background-color: #ececec;
+        padding: 15px 20px 15px 20px;
+        border-radius: 10px;
+        word-wrap: break-word;
+    }
+    .chat-message-friend{
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+    .chat-message-friend img{
+        width: 70px;
+        height: 65px;
+        border-radius: 100%;
+    }
+    
+    .message-container{
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        margin-left: 25%;
+        margin-right: 30px;
+    }
+    .message-text{
+        position: relative;
+    }
+    
+    .message-text input{
+        position: relative;
+        width: 95%;
+        height: 35px;
+        border-radius: 20px;
+        background-color: #ececec;
+        border: none;
+        padding: 10px 20px 10px 30px;
+    }
+    .send{
+        position: absolute;
+        right: 45px;
+        top: 23%;
+        border: none;
+    }
+    .send .send-font{
+        width: 30px;
+        height: 30px;
+    }
+    
+    top: 23%;
+    border: none;
+}
+.send .send-font{
+    width: 30px;
+    height: 30px;
+}
+
+.message-text .send{
+    display: none;
+}
+.message-text .text:focus + .send{
+    display: block;
+}

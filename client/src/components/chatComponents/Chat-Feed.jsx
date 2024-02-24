@@ -10,10 +10,6 @@ const ChatFeed = () => {
         { id: 3, name: 'Alice', message: 'What\'s up?' },
     ];
 
-    const handleUserSelect = (userId) => {
-        setSelectedUser(userId === selectedUser ? null : userId); 
-    };
-
     return (
         <div className="chat-container">
             {chatUsers.map((user) => (
@@ -25,13 +21,6 @@ const ChatFeed = () => {
                     </div>
                 </div>
             ))}
-            {/* Display chat component when a user is selected */}
-            {selectedUser && (
-                <div className="chat-popup">
-                    {/* You can render the chat component here */}
-                    <p>Chat with {chatUsers.find(user => user.id === selectedUser).name}</p>
-                </div>
-            )}
         </div>
     );
 }
