@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate }from "react-router-dom"
+// import { io } from 'socket.io-client';
 import Login from './Pages/Login.jsx';
 import Chat from './Pages/Chat.jsx'
 import Register  from './Pages/Register.jsx';
@@ -6,7 +7,9 @@ import Forgetpassword from "./Pages/Forgetpassword.jsx";
 import Resetpassword from "./Pages/Resetpassword.jsx";
 import PrivateRoutes from "./utils/PrivateRoutes.jsx";
 import Setting from "./Pages/Setting.jsx";
+import socket from "./socket.js";
 
+// const socket = io('http://localhost:3000'); 
 
 function App() {
   return (

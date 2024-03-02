@@ -23,7 +23,7 @@ const Resetpasswordform = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/resetpassword",
+        "http://localhost:5000/user/resetpassword",
         FormData
       );
       console.log("Reset Password sucessfully");

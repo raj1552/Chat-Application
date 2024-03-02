@@ -1,9 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
+import { useCookies } from 'react-cookie';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import "../../css/Login.css";
 import { useNavigate } from 'react-router-dom';
+
 
 
 const LoginForm = () => {
@@ -12,6 +14,7 @@ const LoginForm = () => {
     identifier: "",
     password: "",
   });
+  const [cookies, setCookie] = useCookies(['token']);
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -26,10 +29,10 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/login",
+        "http://localhost:5000/user/login",
         formData
       );
-      localStorage.setItem("token", response.data.body.token);
+      setCookie('token', response.data.body.token);
       console.log("Sucessfully login");
       navigate('/chat')
     } catch (error) {
@@ -40,11 +43,11 @@ const LoginForm = () => {
   const signinGoogle = async (e) =>{
     e.preventDefault()
     try{
-      const response = await axios.get('http://localhost:3000/auth/google', {headers:{'Access-Control-Allow-Origin': '*'}})
+      const response = await axios.get('http://localhost:5000/auth/google')
       console.log(response)
     }
     catch(error){
-      console.log(error)
+      console.error('Error signing in with Google:', error);
     }
   }
   return (

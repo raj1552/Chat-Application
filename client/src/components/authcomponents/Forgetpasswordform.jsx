@@ -21,7 +21,7 @@ const ForgetpasswordForm = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/user/forgetpassword",
+        "http://localhost:4000/user/forgetpassword",
         formData
       );
       console.log("otp sent Sucessfully!");
