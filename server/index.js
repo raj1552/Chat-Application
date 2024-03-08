@@ -6,7 +6,8 @@ import googleRoutes from './src/router/googleRoutes.js'
 import { Server } from 'socket.io'
 import http from 'http'
 import message from './src/router/message.js'
-import messageController from './src/controller/messageController.js'
+import messageController from"./src/controller/messageController.js"
+import pool from './db/config.js'
 
 const app = express();
 const server = http.createServer(app);
@@ -35,29 +36,30 @@ app.get('/', (req, res) => {
 
 app.use('/user', userRoutes)
 app.use('/auth', googleRoutes)
-app.use('/message', message)
+app.use('/api', message)
+io.on('connection', (socket) => {
+  console.log(`⚡: ${socket.id} user just connected!`) 
 
-io.on('connect', socket =>{
-  console.log("A user Connected",socket.id)
-
-  socket.on('send-message', async data =>{
-    try{
-      const { from, to, message } = data;
-
-      await messageController.addMessages({ body:{from, to, message}}, { json: () => {} })
-
-      socket.to(to).emit('receiver-message', {senderId : from, message})
-    }
-    catch(error){
-      console.error(error)
-    }
+  socket.on('private message', (anotherUserId, msg) => {
+    messageController.createMessage(socket.id, anotherUserId, msg)
+      .then(message => {
+        socket.to(anotherUserId).emit('private message', message);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+  
+  socket.on('message', (message) => { 
+    console.log(message)
+    io.emit('message', message)
   })
 
-  socket.on('disconnect', () =>{
-    console.log('user disconnected:', socket.id);
-  })
-})
-
+  socket.on('disconnect', () => {
+    console.log('🔥: A user disconnected');
+    console.log(`${socket.id}`)
+  });
+});
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

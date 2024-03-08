@@ -12,7 +12,7 @@ const loginUser = async (req , res) =>{
     }
 
     const { rows } = await pool.query("SELECT username, password FROM users WHERE username = $1 or email = $2", [identifier, identifier])
-    const  userId  = await pool.query("SELECT id FROM users WHERE username = $1 or email = $2;", [identifier, identifier])
+    const  userId  = await pool.query("SELECT * FROM users WHERE username = $1 or email = $2;", [identifier, identifier])
     const token = jwt.sign({user : userId.rows[0]}, '12345')
 
     if(rows.length === 0){
@@ -27,8 +27,15 @@ const loginUser = async (req , res) =>{
     }
 
     res.cookie('authcookie', token)
-    res.status(200).json({sucess : true, body:{token}})
-  }
+    res.status(200).json({sucess : true, 
+      body:{token , 
+        "user": { 
+          "id" : userId.rows[0].id,
+          "email" : userId.rows[0].email,
+          "username" : userId.rows[0].username
+        }
+      }})
+    }
   catch(err){
     console.error(err)
     res.status(500).json({error : 'Internal Server Error' })

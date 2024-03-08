@@ -7,16 +7,16 @@ import Forgetpassword from "./Pages/Forgetpassword.jsx";
 import Resetpassword from "./Pages/Resetpassword.jsx";
 import PrivateRoutes from "./utils/PrivateRoutes.jsx";
 import Setting from "./Pages/Setting.jsx";
-import socket from "./socket.js";
+import socketIO from "socket.io-client"
 
-// const socket = io('http://localhost:3000'); 
+const socket = socketIO.connect("http://localhost:5000")
 
 function App() {
   return (
     <>
     <Routes>
       <Route element={<PrivateRoutes/>}>
-      <Route path="/" element={<Chat/>} />
+      <Route path="/" element={<Chat socket={socket}/>}  />
       <Route path="/setting" element={<Setting/>} />
       </Route>
       <Route path="/register" element={<Register/>} />

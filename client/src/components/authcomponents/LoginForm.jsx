@@ -4,11 +4,12 @@ import { useCookies } from 'react-cookie';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import "../../css/Login.css";
-import { useNavigate } from 'react-router-dom';
+import { json, useNavigate } from 'react-router-dom';
 
 
 
 const LoginForm = () => {
+  const [userName, setUserName] = useState('');
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     identifier: "",
@@ -32,7 +33,9 @@ const LoginForm = () => {
         "http://localhost:5000/user/login",
         formData
       );
+      console.log(response.data)
       setCookie('token', response.data.body.token);
+      localStorage.setItem('user', JSON.stringify(response.data.body.user));
       console.log("Sucessfully login");
       navigate('/chat')
     } catch (error) {

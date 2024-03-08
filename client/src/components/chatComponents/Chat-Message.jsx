@@ -1,55 +1,96 @@
 import React, { useState, useEffect } from "react";
+
 import "../../css/Chat-box.css";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const ChatMessage = () => {
+import Cookies from "universal-cookie";
+
+import axios from "axios";
+
+import socket from "../../socket.js";
+
+import ChatInput from "./ChatInput.jsx";
+import usesocketsetup from "../usesocketsetup.jsx";
+
+const ChatMessage = ({ currentChat, socket }) => {
   const [messages, setMessages] = useState([]);
+
   const [inputMessage, setInputMessage] = useState("");
 
-  // WebSocket connection
+  const cookies = new Cookies();
+  usesocketsetup()
+
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:5000");
+    const fetchData = async () => {
+      const id = cookies.get("id");
 
-    socket.onopen = () => {
-      console.log("Connected to WebSocket server");
+      const response = await axios.post(
+        "http://localhost:5000/message/getmessage",
+        {
+          from: id,
+
+          to: currentChat.id,
+        }
+      );
+
+      setMessages(response.data);
     };
 
-    socket.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      setMessages([...messages, message]);
-    };
+    fetchData();
+  }, [currentChat, cookies]);
 
-    return () => {
-      socket.close();
-    };
-  }, []);
+  const handleSendMsg = async (msg) => {
+    const id = cookies.get("id");
+    console.log(id)
 
-  const sendMessage = () => {
-    const message = { from: "sender_id", to: "receiver_id", message: inputMessage };
-    // Send message to WebSocket server
-    const socket = new WebSocket("ws://localhost:5000");
-    socket.onopen = () => {
-      socket.send(JSON.stringify(message));
-    };
-    setInputMessage("");
+    socket.current.emit("send-message", {
+      from: currentChat.id,
+      to: id,
+      msg,
+    });
+
+    await axios.post("http://localhost:5000/message/addmessage", {
+      from: id,
+      to: currentChat.id,
+      message: msg,
+    });
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { fromSelf: true, message: msg },
+    ]);
   };
 
   return (
-    <div className="message-container">
-      <div className="chat-box">
-        {messages.map((msg, index) => (
-          <div key={index} className={`chat-message-${msg.sender.toLowerCase()}`}>
-            <p>{msg.message}</p>
-            <img src="/pexels-photo-415829.webp" alt="" />
+    <div className="container">
+      <div className="chat-header">
+        <div className="user-details">
+          <div className="username">
+            <h3>{currentChat.username}</h3>
           </div>
-        ))}
+        </div>
       </div>
-      <div className="message-text">
-        <input type="text" className="text" placeholder="Type a message" value={inputMessage} onChange={(e) => setInputMessage(e.target.value)} />
-        <button className="send" onClick={sendMessage}>
-          <FontAwesomeIcon className="send-font" icon="fa-solid fa-paper-plane" />
-        </button>
+
+      <div className="chat-messages">
+        {messages.map((message) => {
+          return (
+            <div>
+              <div
+                className={`message ${
+                  message.fromSelf ? "sended" : "recieved"
+                }`}
+              >
+                <div className="content ">
+                  <p>{message.message}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
+
+      <ChatInput handleSendMsg={handleSendMsg} socket={socket} />
     </div>
   );
 };

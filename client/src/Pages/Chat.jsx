@@ -1,18 +1,33 @@
-import ChatFeed from '../components/chatComponents/Chat-Feed.jsx';
-import ChatMessage from '../components/chatComponents/Chat-Message.jsx';
-import ChatNavbar from '../components/chatComponents/Chat-Navbar.jsx';
-import usesocketsetup from '../components/usesocketsetup.jsx';
-import socket from '../socket.js';
+import React, { useState, useEffect } from "react";
+import ChatFooter from "../components/chatComponents/ChatFooter";
+import ChatBody from "../components/chatComponents/ChatBody";
+import ChatBar from "../components/chatComponents/ChatBar";
+import ".././index.css";
+import socket from "../socket";
 
 const Chat = () => {
-  usesocketsetup()
-    return ( 
-       <>
-       <ChatNavbar/>
-       <ChatFeed/>
-       <ChatMessage socket={socket}/>
-       </>
-     );
-}
- 
+  const [messages, setMessages] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  useEffect(() => {
+    socket.on("message", (message) => {
+      setMessages((messages) => [...messages, message]);
+    });
+  }, []);
+
+  const handleUserClick = (user) => {
+    setSelectedUser(user);
+  };
+
+  return (
+    <div className="chat">
+      <ChatBar socket={socket} handleUserClick={handleUserClick} />
+      <div className="chat__main">
+        <ChatBody messages={messages} selectedUser={selectedUser} />
+        <ChatFooter socket={socket} />
+      </div>
+    </div>
+  );
+};
+
 export default Chat;
