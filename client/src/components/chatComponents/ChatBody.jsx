@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 
-const ChatBody = ({ messages, selectedUser }) => {
+const ChatBody = ({ messages }) => {
   const navigate = useNavigate();
 
   const handleLeaveChat = () => {
@@ -11,7 +11,6 @@ const ChatBody = ({ messages, selectedUser }) => {
     navigate("/");
     window.location.reload();
   };
-
   return (
     <>
       <header className="chat__mainHeader">
@@ -21,28 +20,32 @@ const ChatBody = ({ messages, selectedUser }) => {
         </button>
       </header>
       <div className="message__container">
-        {messages.map((message) =>
-          message.name === localStorage.getItem("userName") ? (
-            <div className="message__chats" key={message.id}>
-              <p className="sender__name">You</p>
-              <div className="message__sender">
-                <p>{message.text}</p>
-              </div>
-            </div>
-          ) : (
-            <div className="message__chats" key={message.id}>
-              <p>{message.name}</p>
-              <div className="message__recipient">
-                <p>{message.text}</p>
-              </div>
-            </div>
-          )
-        )}
-
-        <div className="message__status">
-          <p>Someone is typing...</p>
+      {messages.length > 0 ? (
+        messages.map(({ message, user: { id, username } = {} }) => (
+          <div className="message__chats" key={message.id}>
+            {id === JSON.parse(localStorage.getItem("user")).id ? (
+              <>
+                <p className="sender__name">You</p>
+                <div className="message__sender">
+                  <p>{message}</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <p>{username}</p>
+                <div className="message__recipient">
+                  <p>{message}</p>
+                </div>
+              </>
+            )}
+          </div>
+        ))
+      ) : (
+        <div className="no-conversation">
+          <p>No conversation</p>
         </div>
-      </div>
+      )}
+    </div>
     </>
   );
 };

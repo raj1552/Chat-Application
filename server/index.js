@@ -37,29 +37,38 @@ app.get('/', (req, res) => {
 app.use('/user', userRoutes)
 app.use('/auth', googleRoutes)
 app.use('/api', message)
-io.on('connection', (socket) => {
-  console.log(`⚡: ${socket.id} user just connected!`) 
 
-  socket.on('private message', (anotherUserId, msg) => {
-    messageController.createMessage(socket.id, anotherUserId, msg)
-      .then(message => {
-        socket.to(anotherUserId).emit('private message', message);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  });
-  
-  socket.on('message', (message) => { 
-    console.log(message)
-    io.emit('message', message)
+let users = []
+io.on('connection', (socket) => {
+  console.log("User Connected", socket.id)
+
+  socket.on("addUser", (userId) => {
+    const userExist = users.find(user => user.userId === userId)
+    if(!userExist){
+      const user = { userId, socketId: socket.id }
+      users.push(user)
+      io.emit("getUsers", users)
+    }
   })
 
-  socket.on('disconnect', () => {
-    console.log('🔥: A user disconnected');
-    console.log(`${socket.id}`)
-  });
-});
+  socket.on("sendMessage", ({sender_id, message, conversation_id}) => {
+    const receiver = users.find(user => user.userId === sender_id)
+    if(receiver){
+      io.to(receiver.socketId).emit("getMessage", {
+        sender_id,
+        message,
+        conversation_id
+      })
+    }
+
+  })
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected", socket.id)
+    users = users.filter(user => user.socketId !== socket.id)
+    io.emit("getUsers", users)
+  })
+})
 
 server.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

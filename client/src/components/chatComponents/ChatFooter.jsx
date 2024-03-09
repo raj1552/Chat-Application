@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
-const ChatFooter = ({socket}) => {
+const ChatFooter = ({conversation_id, socket}) => {
+    const [message, setMessage] = useState([]);
 
-    const [message, setMessage] = useState('');
-    const handleSendMessage = (e) => {
-        e.preventDefault();
-        if (message.trim() && localStorage.getItem('username')) {
-          socket.emit('message', {
-            text: message,
-            name: localStorage.getItem('username'),
-            id: `${socket.id}${Math.random()}`,
-            socketID: socket.id,
-          });
+    useEffect(() => {
+        socket?.on("getMessage", (data) => {
+            setMessage(data)
+        })
+    },[socket])
+    const handleSendMessage = async (e) => {
+        socket.emit('sendMessage', {
+          conversation_id: conversation_id,
+          sender_id: JSON.parse(localStorage.getItem('user')).id,
+          message: message
+        })
+        try{
+          const loggedinUser = JSON.parse(localStorage.getItem('user')).id
+          const response = await axios.post('http://localhost:5000/api/message', {
+            conversation_id: conversation_id,
+            sender_id: loggedinUser,
+            message: message
+          })
+          setMessage('')
         }
-        setMessage('');
+        catch(error){
+            console.error('Error sending message:', error)
+        }
       };
     return ( 
         <div className="chat__footer">
@@ -25,7 +38,7 @@ const ChatFooter = ({socket}) => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
-          <button className="sendBtn">SEND</button>
+          <button type='submit' className="sendBtn">SEND</button>
         </form>
       </div>
      );

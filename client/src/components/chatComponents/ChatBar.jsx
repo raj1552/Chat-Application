@@ -1,86 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
+import axios from 'axios'
+import ChatBody from "./ChatBody";
 
-const ChatBar = ({ socket }) => {
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+const ChatBar = ({ onUserClick, onConversationClick }) => {
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+  const [conversations, setConversations] = useState([])
   const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
-    // Fetch the list of active users from the backend
+  useEffect(() =>{
+    const fetchData = async () =>{
+      const loggedinUser = JSON.parse(localStorage.getItem('user'))
+      const response = await axios.get(`http://localhost:5000/api/conversation/${loggedinUser?.id}`);
+      setConversations(response.data)
+    }
+    fetchData()
+  }, [])
 
-    fetch("http://localhost:5000/message/contacts")
-      .then((res) => res.json())
-
-      .then((data) => setUsers(data));
-
-    // Handle the 'private message' event emitted from the server
-
-    socket.on("private message", (message) => {
-      if (message.name === selectedUser?.username) {
-        setMessages((prev) => [...prev, message]);
-      }
-    });
-  }, [socket, selectedUser]);
-
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const response = await fetch("http://localhost:5000/message/contacts");
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch users");
-  //       }
-  //       const data = await response.json();
-  //       const filteredUsers = data.filter(
-  //         (user) =>
-  //           user.email !== localStorage.getItem("username") &&
-  //           user.username !== localStorage.getItem("username")
-  //       );
-  //       setUsers(filteredUsers);
-  //     } catch (error) {
-  //       console.error("Error fetching users:", error);
-  //     }
-  //   };
-  //   socket.on("private message", (message) => {
-  //     if(message.name === selectedUser?.username){
-  //       setMessages((prevMessages) => [...prevMessages, message]);
-  //     }
-  //   fetchUsers();
-  // }, [socket, selectedUser]);
-
-  const handleUserClick = async (user) => {
+  const handleUserClick = async (conversation_id) => {
     try {
-      setSelectedUser(user);
-      const response = await fetch("http://localhost:5000/message/getmessage", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: user.id,
-          to: user.id,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to fetch messages");
-      }
-      const messages = await response.json();
-      setMessages(messages);
+      const response = await axios.get(`http://localhost:5000/api/message/${conversation_id}`)
+      setMessages(response.data)
+      onConversationClick(conversation_id)
+      onUserClick(response.data)
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
   };
-
   return (
     <div className="chat__sidebar">
+    <h1>{user.username}</h1>
       <h2>Open Chat</h2>
       <div>
         <h4 className="chat__header">ACTIVE USERS</h4>
         <div className="chat__users">
-          {users.map((user) => (
-            <div key={user.username} onClick={() => handleUserClick(user)}>
-              {user.username}
-            </div>
-          ))}
+          {
+            conversations.length > 0 ?
+            conversations.map(({conversation_id, user}) => {
+              return (
+                <div onClick={() => handleUserClick(conversation_id)}>
+                  <h3>{user?.username}</h3>
+                  <p>{user?.email}</p>
+                </div>
+              );
+            }) : <h3>No Conversation</h3>
+          }
         </div>
       </div>
     </div>

@@ -21,21 +21,22 @@ const getUser = async (req, res) =>{
     if(!user_id){
       return res.json("no Conversation")
     }
-    const { rows } = await pool.query(`SELECT email, username, conversation_id FROM users JOIN conversations ON users.id = conversations.sender_id 
-                                      OR users.id = conversations.receiver_id WHERE users.id = $1;`, [user_id])
+    const { rows } = await pool.query(`SELECT u.id, u.username, u.email, c.conversation_id from conversations c join users u ON u.id = c.receiver_id  
+                                      join users r ON r.id = c.sender_id where c.sender_id = $1;`, [user_id])
 
     if(rows.length == 0){
-      return res.json("No converstion")
+      return res.json([])
     }
 
-    res.status(200).json({
-      "user":{
-        "email": rows[0].email,
-        "username": rows[0].username
-      },
-      "conversation_id": rows[0].conversation_id,
-      }
-  )
+    const conversations = rows.map(row => ({
+  user: {
+    email: row.email,
+    username: row.username
+  },
+  conversation_id: row.conversation_id
+}));
+
+res.status(200).json(conversations);
   }
   catch(error){
     console.log(error)
@@ -65,9 +66,9 @@ const createMessage = async (req , res) =>{
 
 const getConversation = async (req, res) =>{
   try{
-    const {conversation_id } =req.params;
-    const { rows } = await pool.query(`SELECT username, email, message_text FROM users 
-                                      join messages on users.id = messages.sender_id where conversation_id = $1`, [conversation_id]);
+    const {conversationId } = req.params;
+    const { rows } = await pool.query(`SELECT id,username, email, message_text FROM users 
+                                      join messages on users.id = messages.sender_id where conversation_id = $1`, [conversationId]);
     
     if(rows.length === 0){
       return res.json({ Error :"No Conversation Found!!"})
@@ -75,6 +76,7 @@ const getConversation = async (req, res) =>{
 
     const renderMessages = rows.map((row) =>({
       "user":{
+        "id": row.id,
         "username":row.username,
         "email":row.email
       },
