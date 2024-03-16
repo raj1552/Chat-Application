@@ -3,13 +3,16 @@ import cors from 'cors'
 
 
 const createConversation = async (req, res) =>{
-  try{
+  try {
     const { sender_id , receiver_id } = req.body;
-    await pool.query("INSERT INTO conversations(sender_id, receiver_id) VALUES ($1 , $2);", [ sender_id, receiver_id]);
+
+     
+
+    await pool.query("INSERT INTO members(user_id, conversation_id) VALUES ($1 , $2), ($3, $2);", [ sender_id, rows[0].conversation_id, receiver_id]);
 
     res.status(200).json("Created Sucessfully");
   }
-  catch(error){
+  catch(error) {
     console.error(error)
   }
 }
@@ -21,24 +24,26 @@ const getUser = async (req, res) =>{
     if(!user_id){
       return res.json("no Conversation")
     }
-    const { rows } = await pool.query(`SELECT u.id, u.username, u.email, c.conversation_id from conversations c join users u ON u.id = c.receiver_id  
-                                      join users r ON r.id = c.sender_id where c.sender_id = $1;`, [user_id])
+    const { rows } = await pool.query(`SELECT c.conversation_id,u.email, u.id AS user_id, u.username FROM conversations c 
+                                      JOIN members m ON c.conversation_id = m.conversation_id JOIN users u ON m.user_id = u.id
+                                      WHERE c.conversation_id IN (SELECT conversation_id FROM members WHERE user_id = $1
+                                      ) AND m.user_id <> $1;`, [user_id])
 
     if(rows.length == 0){
       return res.json([])
     }
 
     const conversations = rows.map(row => ({
-  user: {
-    email: row.email,
-    username: row.username
-  },
-  conversation_id: row.conversation_id
-}));
-
-res.status(200).json(conversations);
+      user: {
+        email: row.email,
+        username: row.username
+      },
+      conversation_id: row.conversation_id
+    }));
+    
+    res.status(200).json(conversations);
   }
-  catch(error){
+  catch(error) {
     console.log(error)
   }
 }
@@ -52,11 +57,15 @@ const createMessage = async (req , res) =>{
     }
 
     if(!conversation_id){
-      await pool.query("INSERT INTO conversations(sender_id, receiver_id) VALUES ($1, $2) RETURNING conversation_id;", [sender_id, receiver_id]);
-      return res.status(200).json("Conversation created sucessfully")
-    }
+    const { rows } = await pool.query('INSERT INTO conversations (created_at) VALUES (CURRENT_TIMESTAMP) RETURNING conversation_id;');
 
-    const { rows } = await pool.query("INSERT INTO messages(conversation_id, message_text, sender_id) VALUES ($1, $2, $3);", [conversation_id, message, sender_id]);
+    await pool.query("INSERT INTO members(user_id, conversation_id) VALUES ($1 , $2), ($3, $2);", [ sender_id, rows[0].conversation_id, receiver_id]);
+
+    return res.status(200).json("Conversation created sucessfully")
+  }
+
+    const { rows } = await pool.query("INSERT INTO messages(conversation_id, message_text, sender_id) VALUES ($1, $2, $3);",
+                                      [conversation_id, message, sender_id]);
     res.status(200).json("Message Sent")
   }
   catch(error){

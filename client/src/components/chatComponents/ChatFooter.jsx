@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 const ChatFooter = ({conversation_id, socket}) => {
-    const [message, setMessage] = useState([]);
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         socket?.on("getMessage", (data) => {
@@ -10,9 +10,10 @@ const ChatFooter = ({conversation_id, socket}) => {
         })
     },[socket])
     const handleSendMessage = async (e) => {
+      e.preventDefault();
         socket.emit('sendMessage', {
           conversation_id: conversation_id,
-          sender_id: JSON.parse(localStorage.getItem('user')).id,
+          user_id: JSON.parse(localStorage.getItem('user')).id,
           message: message
         })
         try{
