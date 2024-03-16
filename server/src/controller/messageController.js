@@ -17,6 +17,27 @@ const createConversation = async (req, res) =>{
   }
 }
 
+const addUser = async (req, res) =>{
+  try{
+    const { user_id } = req.params
+
+    id(!user_id){
+      return res.json("No user Found");
+    }
+
+    const { rows } = await pool.query(``,[user_id])
+
+    if(rows.length == 0){
+      return res.json([])
+    }
+
+    res.status(200).json({rows})
+  }
+  catch(err) {
+    console.error(err)
+  }
+}
+
 const getUser = async (req, res) =>{
   try{
     const { user_id } = req.params

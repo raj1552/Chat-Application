@@ -11,13 +11,13 @@ const ChatFooter = ({conversation_id, socket}) => {
     },[socket])
     const handleSendMessage = async (e) => {
       e.preventDefault();
-        socket.emit('sendMessage', {
-          conversation_id: conversation_id,
-          user_id: JSON.parse(localStorage.getItem('user')).id,
-          message: message
-        })
         try{
           const loggedinUser = JSON.parse(localStorage.getItem('user')).id
+          socket.emit('sendMessage', {
+            conversation_id: conversation_id,
+            sender_id: loggedinUser,
+            message: message
+          });
           const response = await axios.post('http://localhost:5000/api/message', {
             conversation_id: conversation_id,
             sender_id: loggedinUser,

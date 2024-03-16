@@ -36,7 +36,7 @@ const Chat = () => {
     <div className="chat">
       <ChatBar onUserClick={handleUserClick} onConversationClick={handleConversationClick} />
       <div className="chat__main">
-      <ChatBody messages={messages} />
+      <ChatBody messages={messages}  socket={socket}/>
       {activeChatFooter && <ChatFooter conversation_id={conversation} socket={socket} />}
       </div>
     </div>

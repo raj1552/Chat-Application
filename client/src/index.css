@@ -42,11 +42,48 @@
   align-items: center;
 }
 .chat__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   height: 100%;
-  background-color: #F9F5EB;
+  width: 100%;
+  background-color: #f2f3f4 ;
   flex: 0.2;
-  padding: 20px;
+  padding: 40px 20px 20px 25px;
   border-right: 1px solid #fdfdfd;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+.new-conversation button{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.user{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+.user img{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.conversation{
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  cursor: pointer;
+  padding: 20px 25px 20px 25px;
+  width: 100%;
 }
 .chat__main {
   height: 100%;
@@ -72,7 +109,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px;
-  background-color: #F9F5EB;
+  background-color: #f2f3f4 ;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 0px 40px 0px;
 }
 .leaveChat__btn {
   padding: 10px;
@@ -128,14 +166,15 @@
   background-color: rgb(129, 201, 129);
 }
 .message__recipient {
-background-color: #f5ccc2;
+background-color: #f2f3f4;
 width: 300px;
 padding: 10px;
 border-radius: 10px;
 font-size: 15px;
 }
 .message__sender{
-background-color: rgb(194, 243, 194);
+background-color:#318CE7;
+color: white;
 max-width: 300px;
 padding: 10px;
 border-radius: 10px;

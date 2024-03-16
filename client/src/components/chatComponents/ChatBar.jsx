@@ -1,11 +1,23 @@
 import React, { useState, useEffect} from "react";
 import axios from 'axios'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import ChatBody from "./ChatBody";
+import Newconversation from "./New_conversation";
 
 const ChatBar = ({ onUserClick, onConversationClick }) => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
   const [conversations, setConversations] = useState([])
   const [messages, setMessages] = useState([]);
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (value) => {
+    setOpen(false);
+  };
 
   useEffect(() =>{
     const fetchData = async () =>{
@@ -28,8 +40,15 @@ const ChatBar = ({ onUserClick, onConversationClick }) => {
   };
   return (
     <div className="chat__sidebar">
-    <h1>{user.username}</h1>
+      <div className="user">
+        <img src="/image.webp" alt="" />
+      <h1>{user.username}</h1>
+      </div>
       <h2>Open Chat</h2>
+      <div variant="outlined" onClick={handleClickOpen} className="new-conversation">
+        <button><FontAwesomeIcon icon={faPlus} />Start New Conversation</button>
+      </div>
+      <Newconversation open={open} onClose={handleClose} />
       <div>
         <h4 className="chat__header">ACTIVE USERS</h4>
         <div className="chat__users">
@@ -37,9 +56,9 @@ const ChatBar = ({ onUserClick, onConversationClick }) => {
             conversations.length > 0 ?
             conversations.map(({conversation_id, user}) => {
               return (
-                <div onClick={() => handleUserClick(conversation_id)}>
+                <div className="conversation" onClick={() => handleUserClick(conversation_id)}>
                   <h3>{user?.username}</h3>
-                  <p>{user?.email}</p>
+                  <p>You: Hello </p>
                 </div>
               );
             }) : <h3>No Conversation</h3>
