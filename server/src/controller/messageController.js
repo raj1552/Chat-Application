@@ -6,7 +6,7 @@ const createConversation = async (req, res) =>{
   try {
     const { sender_id , receiver_id } = req.body;
 
-     
+    const { rows } = await pool.query('INSERT INTO conversations (created_at) VALUES (CURRENT_TIMESTAMP) RETURNING conversation_id;')
 
     await pool.query("INSERT INTO members(user_id, conversation_id) VALUES ($1 , $2), ($3, $2);", [ sender_id, rows[0].conversation_id, receiver_id]);
 
@@ -21,17 +21,25 @@ const addUser = async (req, res) =>{
   try{
     const { user_id } = req.params
 
-    id(!user_id){
+    if(!user_id){
       return res.json("No user Found");
     }
 
-    const { rows } = await pool.query(``,[user_id])
+    const { rows } = await pool.query(`SELECT * FROM users where id <> $1`,[user_id])
 
     if(rows.length == 0){
       return res.json([])
     }
 
-    res.status(200).json({rows})
+    const users = rows.map(row => ({
+      user:{
+        id : row.id,
+        username: row.username,
+        email: row.email
+      }
+    }))
+
+    res.status(200).json({users})
   }
   catch(err) {
     console.error(err)
@@ -119,4 +127,4 @@ const getConversation = async (req, res) =>{
   }
 }
 
-export default { createConversation, getConversation, createMessage, getUser }
+export default { createConversation, getConversation, createMessage, getUser, addUser }
