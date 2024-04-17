@@ -49,7 +49,7 @@ const Newconversation = (props) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Create New Conversation</DialogTitle>
-      <DialogContent>
+      <DialogContent className="dialogue-box">
         <TextField
           autoFocus
           required
@@ -64,7 +64,7 @@ const Newconversation = (props) => {
           onChange={handleFilterChange}
         />
       </DialogContent>
-      <List sx={{ pt: 0 }}>
+      <List sx={{ pt: 0, margin:"0px 20px 0px 20px" }}>
         {user.length > 0 ? (
           user.map(({ user}) => (
             <ListItem disableGutters key={user.id}>
@@ -73,6 +73,7 @@ const Newconversation = (props) => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-start",
+                  boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
                 }}
 
                 onClick={() => {handleClick(user.id)}}

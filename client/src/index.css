@@ -53,6 +53,13 @@
   border-right: 1px solid #fdfdfd;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
+.new-conversation{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-self: center;
+  gap: 20px;
+}
 .new-conversation button {
   display: flex;
   flex-direction: row;
@@ -194,4 +201,15 @@
   bottom: 50px;
   font-size: 13px;
   font-style: italic;
+}
+.dialogue-box{
+  width: 500px;
+}
+
+.selectuser-dialogue{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }

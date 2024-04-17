@@ -4,12 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import ChatBody from "./ChatBody";
 import Newconversation from "./New_conversation";
+import Groupconversation from './New_Group_Conversation'
 
 const ChatBar = ({ onUserClick, onConversationClick }) => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
   const [conversations, setConversations] = useState([])
   const [messages, setMessages] = useState([]);
   const [open, setOpen] = useState(false);
+  const [unrolled, setUnrolled] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -18,6 +20,14 @@ const ChatBar = ({ onUserClick, onConversationClick }) => {
   const handleClose = (value) => {
     setOpen(false);
   };
+
+  const handleGroup = () => {
+    setUnrolled(true)
+  }
+
+  const handleGroupClose = (value) => {
+    setUnrolled(false)
+  }
 
   useEffect(() =>{
     const fetchData = async () =>{
@@ -44,11 +54,12 @@ const ChatBar = ({ onUserClick, onConversationClick }) => {
         <img src="/image.webp" alt="" />
       <h1>{user.username}</h1>
       </div>
-      <h2>Open Chat</h2>
-      <div variant="outlined" onClick={handleClickOpen} className="new-conversation">
-        <button><FontAwesomeIcon icon={faPlus} />Start New Conversation</button>
+      <div variant="outlined" className="new-conversation">
+        <button onClick={handleClickOpen}><FontAwesomeIcon icon={faPlus} />Start New Conversation</button>
+        <button onClick={handleGroup}><FontAwesomeIcon icon={faPlus} />Start New Group Chat</button>
       </div>
       <Newconversation open={open} onClose={handleClose} />
+      <Groupconversation unrolled={unrolled} onrolled={handleGroupClose} />
       <div>
         <h4 className="chat__header">ACTIVE USERS</h4>
         <div className="chat__users">
