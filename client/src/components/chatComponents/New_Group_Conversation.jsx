@@ -14,7 +14,7 @@ const Newconversation = (props) => {
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [filterText, setFilterText] = useState("");
-  const [ groupname, setGroupname] = useState("")
+  const [groupname, setGroupname] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,20 +31,22 @@ const Newconversation = (props) => {
     setFilterText(event.target.value);
   };
 
-  const handleGroupChat = async (selectedUsers) => { 
-    console.log(groupname)
-    console.log(selectedUsers)
-    try{
-        const response = await axios.post('http://localhost:5000/api/creategroup', {
-            groupname: groupname,
-            selecteduser : selectedUsers
-        })
-        console.log(response.data)
+  const handleGroupChat = async (selectedUsers) => {
+    console.log(groupname);
+    console.log(selectedUsers);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/creategroup",
+        {
+          groupname: groupname,
+          selecteduser: selectedUsers,
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
     }
-    catch(error){
-        console.log(error)
-    }
-  }
+  };
   const handleClick = (userId) => {
     setSelectedUsers((prevSelectedUsers) => {
       if (prevSelectedUsers.includes(userId)) {
@@ -73,7 +75,7 @@ const Newconversation = (props) => {
           onChange={handleFilterChange}
         />
       </DialogContent>
-      <List sx={{ pt: 0 , margin:"0px 20px 0px 20px"}}>
+      <List sx={{ pt: 0, margin: "0px 20px 0px 20px" }}>
         {users.length > 0 ? (
           users
             .filter(({ user }) =>
@@ -86,7 +88,7 @@ const Newconversation = (props) => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "flex-start",
-                    boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"
+                    boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
                   }}
                   onClick={() => {
                     handleClick(user.id);
@@ -94,19 +96,22 @@ const Newconversation = (props) => {
                   selected={selectedUsers.includes(user.id)}
                 >
                   <div className="selectuser-dialogue">
-                  <div className="selectusers">
-                  <ListItemText primary={user.username} />
-                  <ListItemText sx={{ fontSize: 12 }} primary={user.email} />
-                  </div>
-                  <input
-                    type="checkbox"
-                    name="selectedUsers"
-                    value={user.id}
-                    checked={selectedUsers.includes(user.id)}
-                    onChange={() => {
-                      handleClick(user.id);
-                    }}
-                  />
+                    <div className="selectusers">
+                      <ListItemText primary={user.username} />
+                      <ListItemText
+                        sx={{ fontSize: 12 }}
+                        primary={user.email}
+                      />
+                    </div>
+                    <input
+                      type="checkbox"
+                      name="selectedUsers"
+                      value={user.id}
+                      checked={selectedUsers.includes(user.id)}
+                      onChange={() => {
+                        handleClick(user.id);
+                      }}
+                    />
                   </div>
                 </ListItemButton>
               </ListItem>
@@ -114,16 +119,23 @@ const Newconversation = (props) => {
         ) : (
           <h3>No User</h3>
         )}
-        <input
-        type="text"
-        variant="standard"
-        id="groupname"
-        label="Enter Your Group name"
-        value={groupname}
-        onChange={(e) => setGroupname(e.target.value)}
-        />
-       <button onClick={() => handleGroupChat(selectedUsers)}>Create Group</button>
-        <button>Cancel</button>
+        <div className="section-items">
+          <input
+            type="text"
+            variant="standard"
+            id="groupname"
+            label="Enter Your Group name"
+            value={groupname}
+            onChange={(e) => setGroupname(e.target.value)}
+            placeholder="Enter Your Name of the Group"
+          />
+          <div className="buttons">
+            <button className="userinteraction-button" onClick={() => handleGroupChat(selectedUsers)}>
+              Create Group
+            </button>
+            <button className="userinteraction-button" onClick={onrolled}>Cancel</button>
+          </div>
+        </div>
       </List>
     </Dialog>
   );

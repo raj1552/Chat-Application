@@ -24,6 +24,20 @@ const RegisterForm = () => {
     }));
   };
 
+  const validateEmail = (email) => {
+    const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/
+    return emailRegex.test(email)
+  }
+
+  const validateUsername = (username) => {
+    const usernameRegex = /^[A-Za-z][A-Za-z0-9_]{7,29}$/
+    return usernameRegex.test(username)
+  }
+
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    return passwordRegex.test(password)
+  }
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setFormData((prevState) => ({
@@ -34,6 +48,16 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(!validateEmail(formData.email)){
+      return setError("Invalid Email Address")
+    }
+
+    if(!validateUsername(formData.username)){
+      return setError("Invalid Email Address")
+    }
+    if(!validatePassword(formData.password)){
+      return setError("Invalid Password")
+    }
     try{
       const response = await axios.post('http://localhost:5000/user/register', formData)
       setSucess("Sucessfully Registered")

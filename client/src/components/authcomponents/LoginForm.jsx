@@ -26,17 +26,38 @@ const LoginForm = () => {
     }));
   };
 
+  const validateIdentifier = (identifier) => {
+    const regex = /^(?:\w+|\w+([+\.-]?\w+)*@\w+([\.-]?\w+)*(\.[a-zA-z]{2,4})+)$/
+    return regex.test(identifier)
+  }
+
+  const resetForm = () =>{
+    setFormData({
+      identifier: "",
+      password: ""
+    });
+    setUserName("")
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(!validateIdentifier(formData.identifier)){
+      return setError("Invalid Username and Email")
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:5000/user/login",
         formData
       );
+
+      if(!response.data.sucess) {
+        resetForm()
+        return setError("Invalid Email and Password")
+      }
       console.log(response.data)
       setCookie('token', response.data.body.token);
       localStorage.setItem('user', JSON.stringify(response.data.body.user));
-      console.log("Sucessfully login");
       navigate('/chat')
     } catch (error) {
       setError("Please try again.");

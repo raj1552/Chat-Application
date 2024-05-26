@@ -17,14 +17,22 @@ const ForgetpasswordForm = () => {
     }));
   };
 
+  const validateEmail = (email) =>{
+    let emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/;
+    return emailRegex.test(email)
+  }
+
   const handleOtp = async (e) => {
     e.preventDefault();
+    
+    if(!validateEmail(formData.email)){
+      return setError("Inavlid Email")
+    }
     try {
       const response = await axios.post(
-        "http://localhost:4000/user/forgetpassword",
+        "http://localhost:5000/user/forgetpassword",
         formData
       );
-      console.log("otp sent Sucessfully!");
       navigate("/resetpassword");
     } catch (error) {
       setError("Email doesn't Exist")
