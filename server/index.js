@@ -51,17 +51,17 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on("sendMessage", ({sender_id, message, conversation_id}) => {
-    const receiver = users.find(user => user.userId === sender_id)
-    if(receiver){
+  socket.on("sendMessage", ({ sender_id, message, conversation_id, receiver_id }) => {
+    const receiver = users.find(user => user.userId === receiver_id);
+    if (receiver) {
       io.to(receiver.socketId).emit("getMessage", {
         sender_id,
         message,
-        conversation_id
-      })
+        conversation_id,
+        receiver_id
+      });
     }
-
-  })
+  });
 
   socket.on("disconnect", () => {
     console.log("User Disconnected", socket.id)

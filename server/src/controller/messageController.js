@@ -17,6 +17,25 @@ const createConversation = async (req, res) =>{
   }
 }
 
+const getConversation = async (req, res) => {
+  try {
+    const { conversation_id, sender_id} = req.params
+
+    if(!conversation_id || !sender_id) {
+      return res.json("No user Found");
+    }
+
+    const receiverId = await pool.query('SELECT * from members join conversations on members.conversation_id = conversations.conversation_id where members.conversation_id = $1 AND members.user_id <> $2;',[conversation_id, sender_id])
+    const receiverResult = receiverId.rows[0].user_id
+    res.status(200).json({
+      receiverId: receiverResult
+    })
+  }
+  catch(error) {
+    console.log(error)
+  }
+}
+
 const addUser = async (req, res) =>{
   try{
     const { user_id } = req.params
@@ -93,8 +112,8 @@ const createMessage = async (req , res) =>{
     return res.status(200).json("Conversation created sucessfully")
   }
 
-    const { rows } = await pool.query("INSERT INTO messages(conversation_id, message_text, sender_id) VALUES ($1, $2, $3);",
-                                      [conversation_id, message, sender_id]);
+    await pool.query("INSERT INTO messages(conversation_id, message_text, sender_id, receiver_id) VALUES ($1, $2, $3, $4);",
+                                      [conversation_id, message, sender_id, receiver_id]);
     res.status(200).json("Message Sent")
   }
   catch(error){
@@ -102,7 +121,7 @@ const createMessage = async (req , res) =>{
   }
 }
 
-const getConversation = async (req, res) =>{
+const getMessage = async (req, res) =>{
   try{
     const {conversationId } = req.params;
     const { rows } = await pool.query(`SELECT id,username, email, message_text FROM users 
@@ -127,4 +146,4 @@ const getConversation = async (req, res) =>{
   }
 }
 
-export default { createConversation, getConversation, createMessage, getUser, addUser }
+export default { createConversation, getConversation, getMessage, createMessage, getUser, addUser }

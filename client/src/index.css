@@ -81,8 +81,8 @@
   gap: 30px;
 }
 .user img {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -111,7 +111,7 @@
 }
 .chat__mainHeader {
   width: 100%;
-  height: 10vh;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -258,4 +258,16 @@
 
 .userinteraction-button:focus-visible {
   box-shadow: none;
+}
+
+.bar{
+  display: flex;
+  background-color: #f2f3f4;
+  height: 60px;
+  align-items: center;
+}
+
+.bar img{
+  width: 40px;
+  height: 40px;
 }

@@ -25,7 +25,7 @@ const RegisterForm = () => {
   };
 
   const validateEmail = (email) => {
-    const emailRegex = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return emailRegex.test(email)
   }
 
@@ -35,7 +35,7 @@ const RegisterForm = () => {
   }
 
   const validatePassword = (password) => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/
     return passwordRegex.test(password)
   }
   const handleCheckboxChange = (e) => {
@@ -48,12 +48,13 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if(!validateEmail(formData.email)){
       return setError("Invalid Email Address")
     }
 
     if(!validateUsername(formData.username)){
-      return setError("Invalid Email Address")
+      return setError("Invalid Username Address. Please enter a valid email")
     }
     if(!validatePassword(formData.password)){
       return setError("Invalid Password")

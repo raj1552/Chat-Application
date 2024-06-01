@@ -2,9 +2,9 @@ import React, { useState, useEffect} from "react";
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import ChatBody from "./ChatBody";
 import Newconversation from "./New_conversation";
 import Groupconversation from './New_Group_Conversation'
+import Profile from "./Profile";
 
 const ChatBar = ({ onUserClick, onConversationClick }) => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
@@ -42,6 +42,7 @@ const ChatBar = ({ onUserClick, onConversationClick }) => {
     try {
       const response = await axios.get(`http://localhost:5000/api/message/${conversation_id}`)
       setMessages(response.data)
+      console.log(response.data)
       onConversationClick(conversation_id)
       onUserClick(response.data)
     } catch (error) {
@@ -50,14 +51,7 @@ const ChatBar = ({ onUserClick, onConversationClick }) => {
   };
   return (
     <div className="chat__sidebar">
-      <div className="user">
-        <img src="/image.webp" alt="" />
-      <h1>{user.username}</h1>
-      </div>
-      <div variant="outlined" className="new-conversation">
-        <button onClick={handleClickOpen}><FontAwesomeIcon icon={faPlus} />Start New Conversation</button>
-        <button onClick={handleGroup}><FontAwesomeIcon icon={faPlus} />Start New Group Chat</button>
-      </div>
+      <Profile handleGroupClose={handleGroup} handleUser={handleClickOpen}/>
       <Newconversation open={open} onClose={handleClose} />
       <Groupconversation unrolled={unrolled} onrolled={handleGroupClose} />
       <div>

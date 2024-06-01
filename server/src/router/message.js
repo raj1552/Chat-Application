@@ -6,8 +6,9 @@ const router = express.Router()
 
 router.post('/conversation', messageController.createConversation);
 router.get('/conversation/:user_id', messageController.getUser);
+router.get('/conversation/:conversation_id/:sender_id', messageController.getConversation)
 router.post('/message', messageController.createMessage);
-router.get('/message/:conversationId', messageController.getConversation);
+router.get('/message/:conversationId', messageController.getMessage);
 router.get('/user/:user_id', messageController.addUser)
 router.post('/creategroup', groupController.createGroup)
 router.post('/sendmessage', groupController.sendMessage)
