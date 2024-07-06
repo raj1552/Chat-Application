@@ -6,8 +6,7 @@ import googleRoutes from './src/router/googleRoutes.js'
 import { Server } from 'socket.io'
 import http from 'http'
 import message from './src/router/message.js'
-import messageController from"./src/controller/messageController.js"
-import pool from './db/config.js'
+const PORT = 5000
 
 const app = express();
 const server = http.createServer(app);
@@ -19,7 +18,6 @@ const io = new Server(server, {
   }
 })
 
-const PORT = 5000
 app.use(cors({
   cors:{
     origin: "http://localhost:3000",
@@ -42,31 +40,18 @@ let users = []
 io.on('connection', (socket) => {
   console.log("User Connected", socket.id)
 
-  socket.on("addUser", (userId) => {
-    const userExist = users.find(user => user.userId === userId)
-    if(!userExist){
-      const user = { userId, socketId: socket.id }
-      users.push(user)
-      io.emit("getUsers", users)
-    }
+  socket.on('message', (data) => {
+    io.emit('messageResponse', data)
   })
 
-  socket.on("sendMessage", ({ sender_id, message, conversation_id, receiver_id }) => {
-    const receiver = users.find(user => user.userId === receiver_id);
-    if (receiver) {
-      io.to(receiver.socketId).emit("getMessage", {
-        sender_id,
-        message,
-        conversation_id,
-        receiver_id
-      });
-    }
-  });
-
-  socket.on("disconnect", () => {
-    console.log("User Disconnected", socket.id)
-    users = users.filter(user => user.socketId !== socket.id)
-    io.emit("getUsers", users)
+  socket.on('newUser', (data) => {
+    users.push(data)
+    io.emit('newUserResponse', users)
+  })
+  socket.on('disconnect', () => {
+    users = users.filter((user) => user.socketID !== socket.id);
+    io.emit('newUserResponse', users);
+    socket.disconnect();
   })
 })
 

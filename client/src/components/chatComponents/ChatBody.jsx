@@ -1,34 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Cookies from "universal-cookie";
-import io from "socket.io-client";
-import BodyBar from './BodyBar.jsx';
+import BodyBar from "./BodyBar.jsx";
 
-const ChatBody = ({ messages, socket }) => {
-  const [receivedMessages, setReceivedMessages] = useState([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (socket) {
-      socket.on("getMessage", (message) => {
-        setReceivedMessages((prevMessages) => [...prevMessages, message]);
-      });
-    }
-    return () => {
-      if (socket) {
-        socket.off("getMessage");
-      }
-    };
-  }, [socket]);
-
+const ChatBody = ({ messages, lastMessageRef }) => {
   return (
     <>
+    <BodyBar />
       <div className="message__container">
-        <BodyBar/>
         {messages.length > 0 ? (
           messages.map(({ message, user: { id, username } = {} }) => (
             <div className="message__chats" key={message.id}>
-              {id === JSON.parse(localStorage.getItem("user")).id ? (
+              {id == JSON.parse(localStorage.getItem("user")).id ? (
                 <>
                   <p className="sender__name">You</p>
                   <div className="message__sender">
@@ -36,12 +17,12 @@ const ChatBody = ({ messages, socket }) => {
                   </div>
                 </>
               ) : (
-                <>
+                <div className="message__chats" key={message.id}>
                   <p>{username}</p>
                   <div className="message__recipient">
                     <p>{message}</p>
                   </div>
-                </>
+                </div>
               )}
             </div>
           ))
@@ -50,6 +31,10 @@ const ChatBody = ({ messages, socket }) => {
             <p>No conversation</p>
           </div>
         )}
+
+        <div className="message__status">
+        </div>
+        <div ref={lastMessageRef} />
       </div>
     </>
   );

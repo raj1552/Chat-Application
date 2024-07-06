@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 const ChatFooter = ({receiver_id,conversation_id, socket}) => {
     const [message, setMessage] = useState('');
@@ -9,15 +9,14 @@ const ChatFooter = ({receiver_id,conversation_id, socket}) => {
       e.preventDefault();
       try {
         const loggedinUser = JSON.parse(localStorage.getItem('user')).id;
-        if (message.trim() === '') return; // Prevent sending empty messages
-  
-        // Emit message to socket server
-        socket.emit('sendMessage', {
-          conversation_id: conversation_id,
-          sender_id: loggedinUser,
-          message: message,
-          receiver_id: receiver_id
-        });
+        if (message.trim() && localStorage.getItem('user')) {
+          socket.emit('message', {
+            conversation_id: conversation_id,
+            sender_id: loggedinUser,
+            message: message,
+            receiver_id: receiver_id
+          });
+        } // Prevent sending empty messages
   
         // Send message to server via axios
         const response = await axios.post('http://localhost:5000/api/message', {
@@ -28,7 +27,7 @@ const ChatFooter = ({receiver_id,conversation_id, socket}) => {
         });
   
         if (response.status === 200) {
-          setMessage(''); // Clear message input on successful send
+          setMessage(''); 
         } else {
           console.error('Failed to send message:', response.statusText);
         }
@@ -47,7 +46,7 @@ const ChatFooter = ({receiver_id,conversation_id, socket}) => {
             onChange={(e) => setMessage(e.target.value)
             }
           />
-          <button type='submit' disabled={ isLoading } className="sendBtn">SEND</button>
+          <button disabled={ isLoading } className="sendBtn">SEND</button>
         </form>
       </div>
      );

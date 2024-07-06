@@ -1,43 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ChatFooter from "../components/chatComponents/ChatFooter";
 import ChatBar from "../components/chatComponents/ChatBar";
 import ".././index.css";
 import ChatBody from "../components/chatComponents/ChatBody";
-import { io } from "socket.io-client";
 import axios from "axios";
 
-const Chat = () => {
+const Chat = ({socket}) => {
   const [messages, setMessages] = useState([]);
   const [conversation, setConversation] = useState([])
   const [activeChatFooter, setActiveChatFooter] = useState(false);
-  const [socket, setSocket] = useState(null);
   const [receiverId, setReceiverId] = useState(null); 
   const user = JSON.parse(localStorage.getItem("user"));
-
+  const lastMessageRef = useRef(null);
+  
   useEffect(() => {
-    const newSocket = io("http://localhost:5000");
-    setSocket(newSocket);
-
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (socket) {
-      socket.emit("addUser", user?.id);
-
-      socket.on("getMessage", (message) => {
-        if (message.conversation_id === conversation) {
-          setMessages((prevMessages) => [...prevMessages, message]);
-        }
-      });
-
-      return () => {
-        socket.off("getMessage");
-      };
-    }
-  }, [socket, conversation]);
+    socket.on("messageResponse", (data) => setMessages([...messages, data]));
+  }, [socket, messages]);
 
   const handleUserClick = (newMessages) => {
     setMessages(newMessages);
@@ -58,9 +36,9 @@ const Chat = () => {
 
   return (
     <div className="chat">
-      <ChatBar onUserClick={handleUserClick} onConversationClick={handleConversationClick} />
+      <ChatBar onUserClick={handleUserClick} onConversationClick={handleConversationClick} socket={socket} />
       <div className="chat__main">
-      <ChatBody messages={messages}  socket={socket}/>
+      <ChatBody messages={messages}  lastMessageRef={lastMessageRef}/>
       {activeChatFooter && <ChatFooter conversation_id={conversation} socket={socket} receiver_id={receiverId} />}
       </div>
     </div>

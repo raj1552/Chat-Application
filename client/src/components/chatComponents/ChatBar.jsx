@@ -1,17 +1,20 @@
 import React, { useState, useEffect} from "react";
 import axios from 'axios'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import Newconversation from "./New_conversation";
 import Groupconversation from './New_Group_Conversation'
 import Profile from "./Profile";
 
-const ChatBar = ({ onUserClick, onConversationClick }) => {
+const ChatBar = ({ onUserClick, onConversationClick, socket }) => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
   const [conversations, setConversations] = useState([])
   const [messages, setMessages] = useState([]);
   const [open, setOpen] = useState(false);
   const [unrolled, setUnrolled] = useState(false);
+
+  useEffect(() => {
+    socket.on("messageResponse", (data) => setUser(data));
+  }, [socket, user])
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -62,8 +65,8 @@ const ChatBar = ({ onUserClick, onConversationClick }) => {
             conversations.map(({conversation_id, user}) => {
               return (
                 <div className="conversation" onClick={() => handleUserClick(conversation_id)}>
-                  <h3>{user?.username}</h3>
-                  <p>You: Hello </p>
+                  <h3 key={user.socketID}>{user.username}</h3>
+                  <p>You: </p>
                 </div>
               );
             }) : <h3>No Conversation</h3>
