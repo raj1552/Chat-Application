@@ -41,7 +41,13 @@ io.on('connection', (socket) => {
   console.log("User Connected", socket.id)
 
   socket.on('message', (data) => {
-    io.emit('messageResponse', data)
+    console.log("Received message:", data);
+    io.emit('messageResponse', {
+      message: data.message,
+      name: data.name,
+      sender_id: data.sender_id,
+      receiver_id: data.receiver_id
+    })
   })
 
   socket.on('newUser', (data) => {

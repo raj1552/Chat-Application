@@ -124,8 +124,9 @@ const createMessage = async (req , res) =>{
 const getMessage = async (req, res) =>{
   try{
     const {conversationId } = req.params;
-    const { rows } = await pool.query(`SELECT id,username, email, message_text FROM users 
-                                      join messages on users.id = messages.sender_id where conversation_id = $1`, [conversationId]);
+    const { rows } = await pool.query(`SELECT users.id, users.username, users.email, messages.message_text, messages.message_id, messages.sent_at
+                                      FROM users JOIN messages ON users.id = messages.sender_id WHERE messages.conversation_id = $1
+                                        ORDER BY messages.sent_at ASC;`, [conversationId]);
     
     if(rows.length === 0){
       return res.json({ Error :"No Conversation Found!!"})
@@ -137,7 +138,8 @@ const getMessage = async (req, res) =>{
         "username":row.username,
         "email":row.email
       },
-      "message": row.message_text
+      "message": row.message_text,
+      "send_at": row.sent_at
     }))
     res.status(200).json(renderMessages)
   }

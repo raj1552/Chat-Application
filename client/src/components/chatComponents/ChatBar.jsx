@@ -44,10 +44,13 @@ const ChatBar = ({ onUserClick, onConversationClick, socket }) => {
   const handleUserClick = async (conversation_id) => {
     try {
       const response = await axios.get(`http://localhost:5000/api/message/${conversation_id}`)
-      setMessages(response.data)
-      console.log(response.data)
-      onConversationClick(conversation_id)
-      onUserClick(response.data)
+      const messagesWithTimestamp = response.data.map(msg => ({
+        ...msg,
+        timestamp: msg.timestamp || new Date(msg.created_at).getTime() // Assuming your API returns a 'created_at' field
+      }));
+      setMessages(messagesWithTimestamp);
+      onConversationClick(conversation_id);
+      onUserClick(messagesWithTimestamp);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
