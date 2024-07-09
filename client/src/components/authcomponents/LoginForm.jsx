@@ -51,9 +51,9 @@ const LoginForm = () => {
         formData
       );
 
-      if(!response.data.sucess) {
-        resetForm()
-        return setError("Invalid Email and Password")
+      if (!response.data.success) {
+        resetForm();
+        return setError("Invalid Email and Password");
       }
       console.log(response.data)
       setCookie('token', response.data.body.token);

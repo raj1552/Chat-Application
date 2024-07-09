@@ -51,6 +51,7 @@ const RegisterForm = () => {
 
     if(!validateEmail(formData.email)){
       return setError("Invalid Email Address")
+      setFormData('')
     }
 
     if(!validateUsername(formData.username)){
@@ -62,9 +63,11 @@ const RegisterForm = () => {
     try{
       const response = await axios.post('http://localhost:5000/user/register', formData)
       setSucess("Sucessfully Registered")
+      setFormData('')
     }
     catch(error){
       setError("Couldn't Register the account")
+      setFormData('')
     }
   };
   return (
