@@ -7,7 +7,7 @@ import Resetpassword from "./Pages/Resetpassword.jsx";
 import PrivateRoutes from "./utils/PrivateRoutes.jsx";
 import socketIO from "socket.io-client"
 
-const socket = socketIO.connect("http://localhost:5000")
+const socket = socketIO.connect("https://d6b9-2400-1a00-b012-38-f235-fb19-b9dd-312b.ngrok-free.app")
 
 function App() {
   return (
