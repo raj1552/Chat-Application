@@ -23,7 +23,7 @@ const Resetpasswordform = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/user/resetpassword",
+        "https://d6b9-2400-1a00-b012-38-f235-fb19-b9dd-312b.ngrok-free.app/user/resetpassword",
         FormData
       );
       console.log("Reset Password sucessfully");

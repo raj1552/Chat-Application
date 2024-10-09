@@ -35,7 +35,7 @@ const ChatBar = ({ onUserClick, onConversationClick, socket }) => {
   useEffect(() =>{
     const fetchData = async () =>{
       const loggedinUser = JSON.parse(localStorage.getItem('user'))
-      const response = await axios.get(`http://localhost:5000/api/conversation/${loggedinUser?.id}`);
+      const response = await axios.get(`https://d6b9-2400-1a00-b012-38-f235-fb19-b9dd-312b.ngrok-free.app/api/conversation/${loggedinUser?.id}`);
       setConversations(response.data)
     }
     fetchData()
@@ -43,7 +43,7 @@ const ChatBar = ({ onUserClick, onConversationClick, socket }) => {
 
   const handleUserClick = async (conversation_id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/message/${conversation_id}`)
+      const response = await axios.get(`https://d6b9-2400-1a00-b012-38-f235-fb19-b9dd-312b.ngrok-free.app/api/message/${conversation_id}`)
       const messages = Array.isArray(response.data) ? response.data : [];
       const messagesWithTimestamp = messages.map((msg) => ({
         ...msg,

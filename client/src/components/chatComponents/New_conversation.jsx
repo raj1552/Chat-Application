@@ -19,7 +19,7 @@ const Newconversation = (props) => {
     const fetchData = async () => {
       const user_id = JSON.parse(localStorage.getItem("user"));
       const response = await axios.get(
-        `http://localhost:5000/api/user/${user_id?.id}`
+        `https://d6b9-2400-1a00-b012-38-f235-fb19-b9dd-312b.ngrok-free.app/api/user/${user_id?.id}`
       );
       setUser(response.data.users);
     };
@@ -29,7 +29,7 @@ const Newconversation = (props) => {
   const handleClick = async (selecteduser) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/conversation",
+        "https://d6b9-2400-1a00-b012-38-f235-fb19-b9dd-312b.ngrok-free.app/api/conversation",
         {
           sender_id: JSON.parse(localStorage.getItem("user")).id,
           receiver_id: selecteduser,

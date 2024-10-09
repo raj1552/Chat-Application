@@ -12,7 +12,7 @@ const ChatFooter = ({ receiver_id, conversation_id, socket }) => {
       const loggedinUser = JSON.parse(localStorage.getItem("user"));
 
       // Send message to server via axios
-      const response = await axios.post("http://localhost:5000/api/message", {
+      const response = await axios.post("https://d6b9-2400-1a00-b012-38-f235-fb19-b9dd-312b.ngrok-free.app/api/message", {
         conversation_id: conversation_id,
         sender_id: loggedinUser.id,
         message: message,

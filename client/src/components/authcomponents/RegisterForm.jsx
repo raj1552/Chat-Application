@@ -61,7 +61,7 @@ const RegisterForm = () => {
       return setError("Invalid Password")
     }
     try{
-      const response = await axios.post('http://localhost:5000/user/register', formData)
+      const response = await axios.post('https://d6b9-2400-1a00-b012-38-f235-fb19-b9dd-312b.ngrok-free.app/user/register', formData)
       setSucess("Sucessfully Registered")
       setFormData('')
     }
