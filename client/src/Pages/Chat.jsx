@@ -41,7 +41,7 @@ const Chat = ({ socket }) => {
     setActiveChatFooter(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/conversation/${conversation_id}/${user.id}`
+        `https://d6b9-2400-1a00-b012-38-f235-fb19-b9dd-312b.ngrok-free.app/api/conversation/${conversation_id}/${user.id}`
       );
       setReceiverId(response.data.receiverId);
     } catch (error) {

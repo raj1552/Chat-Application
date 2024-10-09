@@ -22,6 +22,7 @@ const Newconversation = (props) => {
         `https://d6b9-2400-1a00-b012-38-f235-fb19-b9dd-312b.ngrok-free.app/api/user/${user_id?.id}`
       );
       setUser(response.data.users);
+      console.log(response.data);
     };
     fetchData();
   }, []);

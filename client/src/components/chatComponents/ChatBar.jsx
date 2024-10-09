@@ -37,6 +37,7 @@ const ChatBar = ({ onUserClick, onConversationClick, socket }) => {
       const loggedinUser = JSON.parse(localStorage.getItem('user'))
       const response = await axios.get(`https://d6b9-2400-1a00-b012-38-f235-fb19-b9dd-312b.ngrok-free.app/api/conversation/${loggedinUser?.id}`);
       setConversations(response.data)
+      console.log(response.data)
     }
     fetchData()
   }, [])
