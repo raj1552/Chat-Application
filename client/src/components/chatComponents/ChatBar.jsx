@@ -44,7 +44,8 @@ const ChatBar = ({ onUserClick, onConversationClick, socket }) => {
   const handleUserClick = async (conversation_id) => {
     try {
       const response = await axios.get(`http://localhost:5000/api/message/${conversation_id}`)
-      const messagesWithTimestamp = response.data.map(msg => ({
+      const messages = Array.isArray(response.data) ? response.data : [];
+      const messagesWithTimestamp = messages.map((msg) => ({
         ...msg,
         timestamp: msg.timestamp || new Date(msg.created_at).getTime() // Assuming your API returns a 'created_at' field
       }));
@@ -59,7 +60,7 @@ const ChatBar = ({ onUserClick, onConversationClick, socket }) => {
     <div className="chat__sidebar">
       <Profile handleGroupClose={handleGroup} handleUser={handleClickOpen}/>
       <Newconversation open={open} onClose={handleClose} />
-      <Groupconversation unrolled={unrolled} onrolled={handleGroupClose} />
+      {/* <Groupconversation unrolled={unrolled} onrolled={handleGroupClose} /> */}
       <div>
         <h4 className="chat__header">ACTIVE USERS</h4>
         <div className="chat__users">

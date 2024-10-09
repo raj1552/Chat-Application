@@ -1,53 +1,45 @@
-import bcrypt from 'bcrypt';
-import supabase from '../../db/config.js'; // Adjust the path accordingly
-import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt'
+import pool from "../../db/config.js"
+import jwt from 'jsonwebtoken'
 
-const loginUser = async (req, res) => {
-  try {
-    const { identifier, password } = req.body;
+const loginUser = async (req , res) =>{
+  try{
+    //Identifier for username or email//
+    const {identifier, password} = req.body
 
-    if (!identifier || !password) {
-      return res.status(401).json({ error: 'Username & Password Required!!' });
+    if(!identifier || !password){
+      return res.status(401).json({error : 'Username & Password Required!!'})
     }
 
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('email', identifier)
-      .single();
+    const { rows } = await pool.query("SELECT username, password FROM users WHERE username = $1 or email = $2", [identifier, identifier])
+    const  userId  = await pool.query("SELECT * FROM users WHERE username = $1 or email = $2;", [identifier, identifier])
+    const token = jwt.sign({user : userId.rows[0]}, '12345')
 
-    if (error || !data) {
-      return res.status(401).json({ error: 'User Not Found or Wrong Password' });
+    if(rows.length === 0){
+      return res.status(401).json({error : 'User Not Found'})
     }
 
-    const passwordMatch = await bcrypt.compare(password, data.password);
+    const hashedPassword = rows[0].password
+    const passwordMatch = await bcrypt.compare(password, hashedPassword)
 
     if(!passwordMatch){
-      return res.status(401).json({error: 'User Not Found or Wrong Password'});
+      return res.status(401).json({error : 'Wrong Password'})
     }
 
-    // Generate JWT token (optional)
-    const token = jwt.sign({ user: data }, '12345', { expiresIn: '1h' });
-
-    // Set token in cookie (optional)
-    res.cookie('authcookie', token, { httpOnly: true });
-
-    // Respond with success and user information
-    res.status(200).json({
-      success: true,
-      body: {
-        token,
-        user: {
-          id: data.id,
-          email: data.email,
-          username: data.username, 
-        },
-      },
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.cookie('authcookie', token)
+    res.status(200).json({sucess : true, 
+      body:{token , 
+        "user": { 
+          "id" : userId.rows[0].id,
+          "email" : userId.rows[0].email,
+          "username" : userId.rows[0].username
+        }
+      }})
+    }
+  catch(err){
+    console.error(err)
+    res.status(500).json({error : 'Internal Server Error' })
   }
-};
+}
 
 export default { loginUser };

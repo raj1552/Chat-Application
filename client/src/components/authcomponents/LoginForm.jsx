@@ -47,11 +47,11 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/user/login",
+        "https://d6b9-2400-1a00-b012-38-f235-fb19-b9dd-312b.ngrok-free.app/user/login",
         formData
       );
 
-      if (!response.data.success) {
+      if (!response.data.sucess) {
         resetForm();
         return setError("Invalid Email and Password");
       }
